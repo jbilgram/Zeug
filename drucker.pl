@@ -190,13 +190,12 @@ my %fernleih = (75 => 1,
 		80 => 1,
 		);
 
-if ( $druconf{$drucker}->[2] > 0 ) {
-  my $benunumQ = $dbh->quote( $benunum );
+ { my $benunumQ = $dbh->quote( $benunum );
   my $bg = 1;
   unless ($best =~ /S O F O R T A U F R U F/) {
     my $erg = $dbh->selectall_arrayref("select d02bg from d02ben where d02bnr = $benunumQ");
     $bg = $erg->[0]->[0];                                 # Benutzergruppe ermitteln
-  }
+  } if ( $druconf{$drucker}->[2] > 0 )
   unless ( $nichtVerschleiern{ $bg } ) {
     $best =~ s/^ \*.+\*.$/" "."*"x80/em;
     $best =~ s/^ (?:Name|Bezeichnung)\s+\:\s+.+\n//m;        # Name/Bezeichnung Benutzer aus Text entfernen
